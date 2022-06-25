@@ -54,19 +54,19 @@ function postLogin(request, response){
                     if(result.length>0){
                     console.log("Todos los Datos");
                     console.log(result);
-                    let json = {
+                    let json = [{
                         error: false,
                         message: "Datos correctos",
                         result: result
-                    }
+                    }]
                     response.send(json)
                     }
                     else{
-                        let json = {
+                        let json = [{
                             error: true,
                             message: "Datos incorrectos",
                             result: result
-                        }
+                        }]
                         response.send(json)
                     }
                 }

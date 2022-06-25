@@ -1,7 +1,7 @@
 const express = require("express")
 const cors = require('cors')
 const userRouters = require("./routes/usuarios.routers")
-// const librosRouters = require("./routes/libros.routers")
+const librosRouters = require("./routes/libros.routers")
 const errorHandling = require("./error/errorHandling")
 
 const app = express(); 
@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false })); 
 app.use(express.json());
 app.use(userRouters);
-// app.use(librosRouters);
+app.use(librosRouters);
 
 
 app.use(function(req, res, next)
