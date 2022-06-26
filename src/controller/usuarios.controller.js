@@ -39,7 +39,7 @@ function postUser(request, response){
 
 function postLogin(request, response){
     let sql; 
-    let correo = request.body.correo
+    let correo = request.body.correo;
     let password = request.body.password;
 
         // sql = 'SELECT id_usuario, nombre, apellidos, correo, foto FROM usuario WHERE (correo=' + correo + ' AND password=' + password + ')';

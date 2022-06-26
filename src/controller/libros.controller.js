@@ -11,11 +11,8 @@ function getLibros(request, response){
 
     let sql;
 
-    if(request.query.nombre){
-        sql = "SELECT id_libro, titulo, tipo, autor, precio, libro.foto FROM appbooks.libro JOIN usuario ON (libro.id_usuario = usuario.id_usuario) WHERE nombre='" + request.query.nombre +"'";
-    }
-    else if(request.query.id){
-        sql = "SELECT id_libro, id_usuario, titulo, tipo, autor, precio, libro.foto FROM appbooks.libro WHERE id_libro='" + request.query.id +"'";
+    if(request.query.id_usuario){
+        sql = "SELECT id_libro, titulo, tipo, autor, precio, libro.foto FROM appbooks.libro WHERE id_usuario='" + request.query.id_usuario +"'";
     }
 
     connection.query(sql, (err, result) => {
@@ -23,11 +20,29 @@ function getLibros(request, response){
             console.log(err);
         }
         else{
-            console.log("Libros");
+            console.log("Usuarios Id_usuario y los libros");
             response.send(result);
         }
     });
 
+}
+
+function getLibrosId(request, response) {
+    let sql;
+
+    if(request.query.id_libro){
+        sql = "SELECT id_libro, id_usuario, titulo, tipo, autor, precio, libro.foto FROM appbooks.libro WHERE id_libro='" + request.query.id_libro +"'";
+    }
+
+    connection.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+        }
+        else{
+            console.log("Libros con id");
+            response.send(result);
+        }
+    });
 }
 
 function postLibros(request, response){
@@ -62,13 +77,13 @@ function postLibros(request, response){
 
 function putLibros(request, response){
 
-    let id = request.body.id
-    let usuario = request.body.id_usuario;
+    let id = request.body.id_libro
+    let idUsuario = request.body.id_usuario;
     let titulo = request.body.titulo;
     let autor = request.body.autor;
     let precio = request.body.precio;
     let foto = request.body.foto;
-    let params = [usuario, titulo, autor, precio, foto, id]
+    let params = [idUsuario, titulo, autor, precio, foto, id]
     let sql = "UPDATE libro SET id_usuario = COALESCE(?, id_usuario) , " + 
                "titulo = COALESCE(?, titulo), " + "autor = COALESCE(?, autor), " + 
                "precio = COALESCE(?, precio), " + "foto = COALESCE(?, foto)  WHERE id_libro = ?";
@@ -103,4 +118,4 @@ function deleteLibros(request, response){
         })
 }
 
-module.exports = {getStart, getLibros, postLibros, putLibros, deleteLibros}
+module.exports = {getStart, getLibros, getLibrosId, postLibros, putLibros, deleteLibros}
