@@ -103,6 +103,7 @@ function putLibros(request, response){
 function deleteLibros(request, response){
     let id = request.body.id;
     params = [id]
+    console.log(id);
 
     let dele = `DELETE FROM libro WHERE id_libro=?`;
 
