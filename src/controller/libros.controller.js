@@ -13,6 +13,10 @@ function getLibros(request, response){
 
     if(request.query.id_usuario){
         sql = "SELECT id_libro, titulo, tipo, autor, precio, libro.foto FROM appbooks.libro WHERE id_usuario='" + request.query.id_usuario +"'";
+    }else if(request.query.id_usuario && request.query.id_libro){
+        let id = request.query.id_libro
+        console.log(id);
+        sql = "SELECT id_libro, id_usuario, titulo, tipo, autor, precio, libro.foto FROM appbooks.libro WHERE libro.id_libro='" + request.query.id_libro +"' AND id_usuario='" + request.query.id_libro +"'";
     }
 
     connection.query(sql, (err, result) => {
@@ -25,24 +29,6 @@ function getLibros(request, response){
         }
     });
 
-}
-
-function getLibrosId(request, response) {
-    let sql;
-
-    if(request.query.id_libro){
-        sql = "SELECT id_libro, id_usuario, titulo, tipo, autor, precio, libro.foto FROM appbooks.libro WHERE id_libro='" + request.query.id_libro +"'";
-    }
-
-    connection.query(sql, (err, result) => {
-        if(err){
-            console.log(err);
-        }
-        else{
-            console.log("Libros con id");
-            response.send(result);
-        }
-    });
 }
 
 function postLibros(request, response){
@@ -77,16 +63,19 @@ function postLibros(request, response){
 
 function putLibros(request, response){
 
-    let id = request.body.id_libro
-    let idUsuario = request.body.id_usuario;
-    let titulo = request.body.titulo;
-    let autor = request.body.autor;
-    let precio = request.body.precio;
-    let foto = request.body.foto;
-    let params = [idUsuario, titulo, autor, precio, foto, id]
+    let id = request.body.id_libro ? request.body.id_libro : null;
+    let idUsuario = request.body.id_usuario ? request.body.id_usuario: null;
+    let titulo = request.body.titulo ? request.body.titulo : null;
+    let tipo = request.body.tipo ? request.body.tipo : null;
+    let autor = request.body.autor ? request.body.autor : null;
+    let precio = request.body.precio ? request.body.precio : null;
+    let foto = request.body.foto ? request.body.foto : null;
+    
+    let params = [idUsuario, titulo, tipo, autor, precio, foto, id]
     let sql = "UPDATE libro SET id_usuario = COALESCE(?, id_usuario) , " + 
-               "titulo = COALESCE(?, titulo), " + "autor = COALESCE(?, autor), " + 
-               "precio = COALESCE(?, precio), " + "foto = COALESCE(?, foto)  WHERE id_libro = ?";
+               "titulo = COALESCE(?, titulo), " + "tipo = COALESCE(?, tipo), " + 
+               "autor = COALESCE(?, autor), " +  "precio = COALESCE(?, precio), " + 
+               "foto = COALESCE(?, foto)  WHERE id_libro = ?";
     console.log(sql); 
     connection.query(sql, params,function (err, result) 
     {
@@ -101,7 +90,7 @@ function putLibros(request, response){
 }
 
 function deleteLibros(request, response){
-    let id = request.body.id;
+    let id = request.query.id_libro;
     params = [id]
     console.log(id);
 
@@ -119,4 +108,4 @@ function deleteLibros(request, response){
         })
 }
 
-module.exports = {getStart, getLibros, getLibrosId, postLibros, putLibros, deleteLibros}
+module.exports = {getStart, getLibros, postLibros, putLibros, deleteLibros}
