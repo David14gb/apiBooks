@@ -11,12 +11,11 @@ function getLibros(request, response){
 
     let sql;
 
-    if(request.query.id_usuario){
+    if(request.query.id_libro && request.query.id_usuario){
+        sql = "SELECT id_libro, id_usuario, titulo, tipo, autor, precio, libro.foto FROM appbooks.libro WHERE libro.id_libro='" + request.query.id_libro +"' AND id_usuario='" + request.query.id_usuario +"'";
+        
+    }else if(request.query.id_usuario){
         sql = "SELECT id_libro, titulo, tipo, autor, precio, libro.foto FROM appbooks.libro WHERE id_usuario='" + request.query.id_usuario +"'";
-    }else if(request.query.id_usuario && request.query.id_libro){
-        let id = request.query.id_libro
-        console.log(id);
-        sql = "SELECT id_libro, id_usuario, titulo, tipo, autor, precio, libro.foto FROM appbooks.libro WHERE libro.id_libro='" + request.query.id_libro +"' AND id_usuario='" + request.query.id_libro +"'";
     }
 
     connection.query(sql, (err, result) => {
